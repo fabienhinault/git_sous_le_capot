@@ -13,9 +13,13 @@ do
         echo
         eval "$commands"
         commands=
-    fi
-    commands="$commands
+    elif [ -z "$commands" ]
+    then
+        commands=$line
+    else
+        commands="$commands
 $line"
+    fi
 #    printf "commands:%s\n" "$commands"
 #    echo "commands:$commands"
 done < commands.bash
