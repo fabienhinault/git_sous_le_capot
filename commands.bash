@@ -31,22 +31,6 @@ git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
 
 git cat-file -t 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
 
-popd
-
-git clone https://github.com/schacon/simplegit.git
-
-pushd simplegit
-
-ls -RF1
-
-git cat-file -p master^{tree}
-
-git cat-file -p 99f1a6d12cb4b6f19c8655fca46c3ecf317074e0
-
-popd
-
-pushd bac_a_sable
-
 git update-index --add --cacheinfo 100644 \
     83baae61804e65cc73a7201a7252750c76066a30 test.txt
 
