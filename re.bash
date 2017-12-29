@@ -8,8 +8,10 @@ do
     then
         read < /dev/tty
         echo -e "> $commands"
+        read < /dev/tty
         echo
         eval "$commands"
+        echo
         commands=
     elif [ -z "$commands" ]
     then
