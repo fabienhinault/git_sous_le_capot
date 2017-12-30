@@ -79,6 +79,52 @@ pigz -d .git/objects/01/55eb4229851634a0f03eb265b69f5a2d56f341
 
 pigz -d .git/objects/01/55eb4229851634a0f03eb265b69f5a2d56f341 | hexdump -C
 
+find .git/refs
+
+find .git/refs -type f
+
+echo $THIRD > .git/refs/heads/master
+
+git log --pretty=oneline master
+
+git update-ref refs/heads/master $THIRD
+
+git update-ref refs/heads/test $SECOND
+
+git log --pretty=oneline test
+
+cat .git/HEAD
+
+git checkout test
+
+cat .git/HEAD
+
+git symbolic-ref HEAD
+
+git symbolic-ref HEAD refs/heads/test
+
+cat .git/HEAD
+
+git symbolic-ref HEAD test
+
+git update-ref refs/tags/v1.0 cac0cab538b970a37ea1e769cbbde608743bc96d
+
+git tag -a v1.1 1a410efbd13591db07496601ebc7a059dd55cfe9 -m 'test tag'
+
+cat .git/refs/tags/v1.1
+
+cat .git/refs/remotes/origin/master
+
+git remote add git@github.com:fabienhinault/git_sous_le_capot.git
+
+cat .git/refs/remotes/origin/master
+
+find .git/objects -type f
+
+curl https://raw.githubusercontent.com/mojombo/grit/master/lib/grit/repo.rb > repo.rb
+
+
+
 popd
 rm -rf bac_a_sable
 rm -rf simplegit
