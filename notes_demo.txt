@@ -1,0 +1,49 @@
+Notes démo
+
+>ls --recursive --classify -1
+(pack et info :  répertoires. Pack : format vieux commits, info : « Additional information about the object store is recorded in this directory. »)
+
+>find .git/objects -type f
+(pas de fichier simple)
+
+>echo "…" | git hash-object -w –stdin
+(hash-object Première commande de plomberie, prends un fichier et l’ajoute au contenu du dépôt.
+-w : écrit dans le dépôt
+--stdin : prend ce qui précède comme chose à hacher
+Résultat : un SHA-1. Vous savez déjà que les commits sont nommés par des SHA-1, nous allons voir que tout est nommé par des SHA-1
+
+>find .git/objects -type f
+On retrouve le SHA-1 dans le répertoire objects
+(2 premiers hexas, slash, reste)
+
+>git cat-file -p 18008
+Cat-file, 2ème commande  plomberie, permet de voir le contenu d’un élément du dépôt
+-p (pretty print) détermine le type de contenu et l’affiche en conséquence
+
+>echo 'version 1' > test.txt
+(Un peu de contrôle de version rudimentaire : on écrit version 1 dans test.txt)
+
+>git hash-object -w test.txt
+(on sauvegarde cette version dans notre système de fichiers et on obtient la clé)
+
+>echo 'version 2' > test.txt
+(on modifie le fichier)
+
+>git hash-object -w test.txt
+(et on sauvegarde la nouvelle version)
+
+>find .git/objects -type f
+(le système de fichier contient les 2 versions du fichier test.txt)
+
+>git cat-file -p 83baae61804e65cc73a7201a7252750c76066a30
+(On peut récupérer l'une ou l'autre des versions du fichier)
+
+>git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+
+>git cat-file -t 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+(-t renvoie le type de l'objet :  ici un blob)
+
+[pres]
+
+
+>git update-index --add --cacheinfo 100644 83baae61 test.txt

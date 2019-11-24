@@ -3,9 +3,11 @@ git init bac_a_sable
 
 pushd bac_a_sable
 
-ls -F1 .git
+ls -la
 
-find .git/objects
+ls --classify -1 .git
+
+ls --recursive --classify -1
 
 find .git/objects -type f
 
@@ -25,9 +27,13 @@ git hash-object -w test.txt
 
 find .git/objects -type f
 
-git cat-file -p 83baae61804e65cc73a7201a7252750c76066a30
+git cat-file -p 83baae61804e65cc73a7201a7252750c76066a30 > test.txt
 
-git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+cat test.txt
+
+git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a > test.txt
+
+cat test.txt
 
 git cat-file -t 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
 
