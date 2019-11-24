@@ -7,7 +7,7 @@ ls -la
 
 ls --classify -1 .git
 
-ls --recursive --classify -1
+ls --recursive --classify -1 .git/objects
 
 find .git/objects -type f
 
@@ -19,9 +19,13 @@ git cat-file -p 1800880b3d3c97c85cf5912acc058bcef9a8d591
 
 echo 'version 1' > test.txt
 
+cat test.txt
+
 git hash-object -w test.txt
 
 echo 'version 2' > test.txt
+
+cat test.txt
 
 git hash-object -w test.txt
 
@@ -36,6 +40,10 @@ git cat-file -p 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a > test.txt
 cat test.txt
 
 git cat-file -t 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a
+
+git -C .. cat-file -p master^{tree}
+
+git -C .. cat-file -p d564d0bc3dd917926892c55e3706cc116d5b165e
 
 git update-index --add --cacheinfo 100644 \
     83baae61804e65cc73a7201a7252750c76066a30 test.txt
@@ -81,9 +89,20 @@ find .git/objects -type f | sed -r -e "s#.*/([0-9a-f]{2})/(.*$)#\1\2#" | xargs -
 
 (echo -ne "blob `wc -c < new.txt`\0"; cat new.txt) | sha1sum
 
-pigz -d .git/objects/01/55eb4229851634a0f03eb265b69f5a2d56f341
+pigz -d < .git/objects/fa/49b077972391ad58037050f2a75f74e3671e92
 
-pigz -d .git/objects/01/55eb4229851634a0f03eb265b69f5a2d56f341 | hexdump -C
+pigz -d < .git/objects/fa/49b077972391ad58037050f2a75f74e3671e92 | hexdump -C
+
+
+echo -ne  "blob 39\0je suis content d'assister au dej tech" | sha1sum
+
+chmod u+w .git/objects/18/00880b3d3c97c85cf5912acc058bcef9a8d591
+
+echo -ne  "blob 39\0je suis content d'assister au dej tech" | pigz -z  > .git/objects/18/00880b3d3c97c85cf5912acc058bcef9a8d591
+
+git cat-file -t 1800880b3d3c97c85cf5912acc058bcef9a8d591
+
+git cat-file -p 1800880b3d3c97c85cf5912acc058bcef9a8d591
 
 find .git/refs
 

@@ -45,5 +45,66 @@ Cat-file, 2ème commande  plomberie, permet de voir le contenu d’un élément 
 
 [pres]
 
+>git update-index --add --cacheinfo 100644  83baae61 test.txt
+(J'ajoute dans l'index/zone de transit/staging area le contenu de l'objet 83baae6, et je dis que c'est un fichier qui s'appelle test.txt. 100644, c'est le mode, ça veut dire que c'est un fichier ordinaire, c'est comme les mode unix en plus simple, et plus rigide)
 
->git update-index --add --cacheinfo 100644 83baae61 test.txt
+>git write-tree
+(On écrit le contenu de l'index dans objects)
+
+>git cat-file -t d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+(la clé correspond bien à un arbre)
+
+>git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+(qui contient le fichier test.txt version 83baae)
+
+>git update-index --add --cacheinfo 100644 1f7a7a47 test.txt
+(je change le contenu du fichier test.txt dans l'index)
+
+>echo 'new file' > new.txt
+(Je crée un nouveau fichier dans le répertoire de travail, classiquement)
+
+>git update-index --add new.txt
+(L'index a maintenant la nouvelle version de test.txt, et le nouveau fichier new.txt)
+
+>git write-tree
+(on écrit l'état de l'index dans un nouvel arbre)
+
+
+>git cat-file -p 0155eb4229851634a0f03eb265b69f5a2d56f341
+
+>git read-tree --prefix=bak d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+(Pour rigoler, on va ajouter la version précédente comme sous-répertoire
+de la nouvelle version)
+
+>git write-tree
+
+>git cat-file -p 3c4e9cd789d88d8d89c1073707c3585e41b0e614
+
+[pres]
+
+>FIRST=$(echo 'mon premier commit' | git commit-tree d8329f)
+(commit-tree crée un commit à partir de l'arbre donné en argument, avec le commentaire reçu du pipe)
+
+>echo $FIRST
+(SHA-1 du commit)
+
+>git cat-file -p $FIRST
+(contenu du commit)
+
+>SECOND=$(echo 'second commit' | git commit-tree 0155eb -p $FIRST)
+(2e commit à partir du 2e arbre, a pour prédécesseur le premier commit)
+
+>THIRD=$(echo 'et le troisième!' | git commit-tree 3c4e9c -p $SECOND)
+(même chose pour le 3e commit)
+
+>git log --stat $THIRD
+(git log commence à ressembler à quelque chose de connu)
+
+>find .git/objects -type f
+(Plus de fichiers)
+
+find .git/objects -type f | sed -r -e "s#.*/([0-9a-f]{2})/(.*$)#\1\2#" | xargs -n 1 git cat-file -t
+
+[pres]
+
+(echo -ne "blob `wc -c < new.txt`\0"; cat new.txt) | sha1sum
